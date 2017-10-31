@@ -17,19 +17,18 @@ typedef struct OperandType
 }OperandType,* LinkedList;
 
 LinkedStack Init_LinkedStack();//初始化栈 
-LinkedList Transfer_ExpressList();//生成后缀表达式
-char judge(char a,char b);//判断优先级 
-int judge_string(char t);
-int LinkedStack_Empty(LinkedStack top);//
+int LinkedStack_Empty(LinkedStack top);//判断栈满 
 int Push_LinkedStack(LinkedStack top,elemtype x);//入栈 
 int Pop_LinkedStack(LinkedStack top,elemtype *x);//出栈 
 int GetTop_LinkedStack(LinkedStack top,elemtype *x);//取栈顶元素 
 
+LinkedList Transfer_ExpressList();//生成后缀表达式
+char judge(char a,char b);//判断优先级 
+int judge_string(char t);//优先级判断分支 
 void evaluatePostfixExpression(LinkedList expressLink, int * result);//计算后缀表达式 
 void calculate(LinkedStack S, char operator);//四级运算 
-int arithmeticalOperate(int operand1,int operand2,char operator);
-
-int print_LinkedList(LinkedList head);//
+int arithmeticalOperate(int operand1,int operand2,char operator);//加减乘除运算 
+int print_LinkedList(LinkedList head);//打印后缀表达式 
 
 int main()
 {
@@ -44,7 +43,7 @@ int main()
 int print_LinkedList(LinkedList head)
 {
 	LinkedList p=head->next;
-	printf("\n");
+	printf("\n后缀表达式：");
 	if(p->next==NULL)
 		return 0;
 	while(p)
@@ -55,6 +54,7 @@ int print_LinkedList(LinkedList head)
 			printf("%c ",p->operator);
 		p=p->next;
 	}
+	printf("\n");
 	return 1;
 } 
 LinkedList Transfer_ExpressList()
@@ -73,7 +73,7 @@ LinkedList Transfer_ExpressList()
 	c=getchar();
 	while(c!=10)
 	{
-		printf("input:%c\n",c);
+		//printf("input:%c\n",c);
 		if(c>=48&&c<=57)
 		{
 			num=(int)c-'0';
@@ -100,9 +100,8 @@ LinkedList Transfer_ExpressList()
 			if(!LinkedStack_Empty(P))
 			{
 				GetTop_LinkedStack(P,&x);
-				//printf("feikong\n");
 				d=(char)x;
-				printf("youxianji:%c\n",judge(d,c));
+				//printf("youxianji:%c\n",judge(d,c));
 				switch(judge(d,c))
 				{
 					case '<': {
@@ -263,7 +262,7 @@ void calculate(LinkedStack S, char operator)
 	Pop_LinkedStack(S,&operand1);
 	result=arithmeticalOperate(operand1,operand2,operator);
 	Push_LinkedStack(S,result);
-	printf("oprand1:%d oprand:%d operator:%c result:%d",operand1,operand2,operator,result);
+	//printf("oprand1:%d oprand:%d operator:%c result:%d",operand1,operand2,operator,result);
 }
 int arithmeticalOperate(int operand1,int operand2,char operator)
 {
