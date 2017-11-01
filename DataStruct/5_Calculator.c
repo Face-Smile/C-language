@@ -16,19 +16,19 @@ typedef struct OperandType
 	struct OperandType *next;
 }OperandType,* LinkedList;
 
-LinkedStack Init_LinkedStack();//³õÊ¼»¯Õ» 
-int LinkedStack_Empty(LinkedStack top);//ÅÐ¶ÏÕ»Âú 
-int Push_LinkedStack(LinkedStack top,elemtype x);//ÈëÕ» 
-int Pop_LinkedStack(LinkedStack top,elemtype *x);//³öÕ» 
-int GetTop_LinkedStack(LinkedStack top,elemtype *x);//È¡Õ»¶¥ÔªËØ 
+LinkedStack Init_LinkedStack();//åˆå§‹åŒ–æ ˆ 
+int LinkedStack_Empty(LinkedStack top);//åˆ¤æ–­æ ˆæ»¡ 
+int Push_LinkedStack(LinkedStack top,elemtype x);//å…¥æ ˆ 
+int Pop_LinkedStack(LinkedStack top,elemtype *x);//å‡ºæ ˆ 
+int GetTop_LinkedStack(LinkedStack top,elemtype *x);//å–æ ˆé¡¶å…ƒç´  
 
-LinkedList Transfer_ExpressList();//Éú³Éºó×º±í´ïÊ½
-char judge(char a,char b);//ÅÐ¶ÏÓÅÏÈ¼¶ 
-int judge_string(char t);//ÓÅÏÈ¼¶ÅÐ¶Ï·ÖÖ§ 
-void evaluatePostfixExpression(LinkedList expressLink, int * result);//¼ÆËãºó×º±í´ïÊ½ 
-void calculate(LinkedStack S, char operator);//ËÄ¼¶ÔËËã 
-int arithmeticalOperate(int operand1,int operand2,char operator);//¼Ó¼õ³Ë³ýÔËËã 
-int print_LinkedList(LinkedList head);//´òÓ¡ºó×º±í´ïÊ½ 
+LinkedList Transfer_ExpressList();//ç”ŸæˆåŽç¼€è¡¨è¾¾å¼
+char judge(char a,char b);//åˆ¤æ–­ä¼˜å…ˆçº§ 
+int judge_string(char t);//ä¼˜å…ˆçº§åˆ¤æ–­åˆ†æ”¯ 
+void evaluatePostfixExpression(LinkedList expressLink, int * result);//è®¡ç®—åŽç¼€è¡¨è¾¾å¼ 
+void calculate(LinkedStack S, char operator);//å››çº§è¿ç®— 
+int arithmeticalOperate(int operand1,int operand2,char operator);//åŠ å‡ä¹˜é™¤è¿ç®— 
+int print_LinkedList(LinkedList head);//æ‰“å°åŽç¼€è¡¨è¾¾å¼ 
 
 int main()
 {
@@ -37,13 +37,13 @@ int main()
 	expressLink=Transfer_ExpressList();
 	print_LinkedList(expressLink);
 	evaluatePostfixExpression(expressLink, &result);
-	printf("¼ÆËã½á¹ûÎª£º%d\n",result);
+	printf("è®¡ç®—ç»“æžœä¸ºï¼š%d\n",result);
 	return 0;
 }
 int print_LinkedList(LinkedList head)
 {
 	LinkedList p=head->next;
-	printf("\nºó×º±í´ïÊ½£º");
+	printf("\nåŽç¼€è¡¨è¾¾å¼ï¼š");
 	if(p->next==NULL)
 		return 0;
 	while(p)
@@ -69,7 +69,7 @@ LinkedList Transfer_ExpressList()
 	tail=head;
 	if(head==NULL)
 		return NULL;
-	printf("ÇëÊäÈëÒª¼ÆËãµÄ±í´ïÊ½£º");
+	printf("è¯·è¾“å…¥è¦è®¡ç®—çš„è¡¨è¾¾å¼ï¼š");
 	c=getchar();
 	while(c!=10)
 	{
@@ -150,7 +150,7 @@ LinkedList Transfer_ExpressList()
 	return head;
 }
 
-char judge(char a,char b)//ÅÐ¶ÏÓÅÏÈ¼¶
+char judge(char a,char b)//åˆ¤æ–­ä¼˜å…ˆçº§
 {
 	char def[6][6]={{'>','>','<','<','<','>'},
 					{'>','>','<','<','<','>'},
