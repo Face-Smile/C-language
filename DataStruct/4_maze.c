@@ -1,21 +1,24 @@
 # include<stdio.h>
 # include<windows.h>
 # include<stdlib.h>
-# define SIZE 7
-# define MAXSIZE 30
+# define SIZE 10
+# define MAXSIZE 100
 typedef struct sequenStack
 {
 	int data[MAXSIZE][3];
 	int top;
 }SequenStack;
 int maze[SIZE][SIZE]={
-		{1,1,1,1,1,1,1},
-		{1,0,1,1,0,0,1},
-		{1,0,1,0,0,1,1},
-		{1,0,1,0,0,0,1},
-		{1,0,0,0,1,0,1},
-		{1,0,1,0,1,0,1},
-		{1,1,1,1,1,1,1}
+		{1,1,1,1,1,1,1,1,1,1},
+		{1,0,0,1,0,0,0,1,0,1},
+		{1,0,0,1,0,0,0,1,0,1},
+		{1,0,0,0,0,1,1,0,0,1},
+		{1,0,1,1,1,0,0,0,0,1},
+		{1,0,0,0,1,0,0,0,0,1},
+		{1,0,1,0,0,0,1,0,0,1},
+		{1,0,1,1,1,0,1,1,0,1},
+		{1,1,0,0,0,0,0,0,0,1},
+		{1,1,1,1,1,1,1,1,1,1}
 };
 typedef struct
 {
@@ -38,25 +41,28 @@ int Pop_SequenStack(SequenStack *S,Path *x);//出栈
 int GetTop_SequenStack(SequenStack *S,Path *x);//取栈顶数据元素 
 int alterTop_SequenStack(SequenStack *S,Path x);//修改栈顶元素 
 SequenStack *sortStack(SequenStack *S);//逆序 
-void graphy_maze();
+void graphy_maze(SequenStack*S);//打印迷宫 
 
 int main()
 {
+	system("mode con cols=120 lines=30");
 	Path start,end,t;
 	start.col=1;
 	start.row=1;
 	start.direction=1;
-	end.col=1;
-	end.row=5;
+	end.col=8;
+	end.row=8;
 	SequenStack *S;
 	S=Init_SequenStack();
 	Push_SequenStack(S,start);
-	graphy_maze();
+	graphy_maze(S);
+	//graphy_maze(S);
 	if(find(S,start,end)==0)
-		printf("未找到可行路径！\n");
+		printf("\n未找到可行路径！\n");
 	else
 	{
 		S=sortStack(S);
+		printf("\n");
 		while(S->top!=-1)
 		{
 			Pop_SequenStack(S,&t);
@@ -80,6 +86,7 @@ int find(SequenStack *S,Path start,Path end)
 		//system("pause");
 		while(temp.direction<=4)
 		{
+			
 			i=x+move[temp.direction].x;
 			j=y+move[temp.direction].y;
 			temp.direction++;
@@ -93,6 +100,7 @@ int find(SequenStack *S,Path start,Path end)
 			if(i==end.col&&j==end.row)
 			{
 				Push_SequenStack(S,trypath);
+				graphy_maze(S);
 				return 1;
 			}
 			else if(maze[i][j]==1||maze[i][j]==-1)
@@ -100,13 +108,17 @@ int find(SequenStack *S,Path start,Path end)
 			else if(maze[i][j]==0)
 			{
 				Push_SequenStack(S,trypath);
+				graphy_maze(S);
 				GetTop_SequenStack(S,&temp);
 				maze[i][j]=-1;
 				break;
 			}
 		}
 		if(temp.direction>4)
+		{
 			Pop_SequenStack(S,&temp);
+			graphy_maze(S);
+		}	
 	}
 	return 0; 
 }
@@ -218,19 +230,58 @@ SequenStack *sortStack(SequenStack *S)//逆序栈
 }
 */
 
-
-void graphy_maze()
+void graphy_maze(SequenStack*S)
 {
 	int i,j;
-	for(i=0;i<7;i++)
+	Path temp;
+	COORD coord;
+	HANDLE hOutput;
+	hOutput=GetStdHandle(STD_OUTPUT_HANDLE);
+	coord.X=80;
+	coord.Y=15;
+	SetConsoleCursorPosition(hOutput,coord);
+	printf("ESC ：退出.space：暂停.");
+	GetTop_SequenStack(S,&temp);
+	for(i=0;i<SIZE;i++)
 	{
-		for(j=0;j<7;j++)
+		for(j=0;j<SIZE;j++)
 		{
-			if(maze[i][j]==1)
-				printf("▉");
-			else if(maze[i][j]==0)
-				printf("  ");
+			coord.X=4*j+30;
+			coord.Y=2*i+5;
+ 			SetConsoleCursorPosition(hOutput,coord);
+			if(i==temp.col&&j==temp.row)
+			{
+ 				printf("★★");
+ 				coord.Y++;
+ 				SetConsoleCursorPosition(hOutput,coord);
+ 				printf("★★");
+			}
+			else if(maze[i][j]==1)
+			{
+				printf("■■");
+				coord.Y++;
+ 				SetConsoleCursorPosition(hOutput,coord);
+				printf("■■");
+			}
+			else
+			{
+				printf("    ");
+				coord.Y++;
+ 				SetConsoleCursorPosition(hOutput,coord);
+				printf("    ");
+			}
 		}
-		printf("\n");
 	}
+ 	Sleep(350);
+ 	if(GetAsyncKeyState(VK_SPACE))
+ 	while(1)
+ 	{
+ 		Sleep(300);
+ 		if(GetAsyncKeyState(VK_SPACE))
+ 		{
+	 		break;
+	 	}
+ 	}
+ 	else if(GetAsyncKeyState(VK_ESCAPE))
+ 		exit(0); 
 }
